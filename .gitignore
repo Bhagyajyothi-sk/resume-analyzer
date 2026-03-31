@@ -1,0 +1,21 @@
+# Python
+__pycache__/
+*.pyc
+
+# Virtual Environment
+venv/
+
+# Uploads
+uploads/
+
+# Flask session
+flask_session/
+
+# Environment variables
+.env
+
+# OS files
+.DS_Store
+
+# VS Code
+.vscode/
