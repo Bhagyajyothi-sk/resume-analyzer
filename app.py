@@ -72,8 +72,10 @@ app.config['MYSQL_CHARSET'] = 'utf8mb4'
 app.config['MYSQL_COLLATION'] = 'utf8mb4_unicode_ci'
 mysql = MySQL(app)
 
-UPLOAD_FOLDER = "uploads"
+UPLOAD_FOLDER = os.path.join(os.getcwd(), "uploads")
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 # ═══════════════════════════════════════════════════════════════════════════════
 #  LARGE DATASET
@@ -1102,6 +1104,9 @@ def logout():
 # ── Resume Upload ─────────────────────────────────────────────────────────────
 @app.route('/api/upload', methods=['POST'])
 def upload_resume():
+    
+    if 'user_id' not in session:
+        return jsonify({"success": False, "message": "Please login first."})
     if 'resume' not in request.files:
         return jsonify({"success": False, "message": "No file uploaded."})
     file = request.files['resume']
@@ -1113,7 +1118,7 @@ def upload_resume():
         return jsonify({"success": False, "message": "Only PDF and DOCX files are supported."})
 
     filename = f"{uuid.uuid4().hex}{ext}"
-    filepath = os.path.join(UPLOAD_FOLDER, filename)
+    filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
     file.save(filepath)
 
     if ext == '.pdf':
