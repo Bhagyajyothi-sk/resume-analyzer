@@ -1049,54 +1049,86 @@ def test_db():
 # ── Auth ──────────────────────────────────────────────────────────────────────
 @app.route('/api/login', methods=['POST'])
 def login():
-    data = request.get_json()
-    email = data.get('email','').strip()
-    password = data.get('password','').strip()
-    if not email or not password:
-        return jsonify({"success": False, "message": "Email and password are required."})
-    if '@' not in email:
-        return jsonify({"success": False, "message": "Please enter a valid email."})
-    if len(password) < 6:
-        return jsonify({"success": False, "message": "Password must be at least 6 characters."})
-    cur = mysql.connection.cursor()
+    try:
+        data = request.get_json()
+        email = data.get('email', '').strip()
+        password = data.get('password', '').strip()
 
-    cur.execute("SELECT id FROM users WHERE email=%s", (email,))
-    user = cur.fetchone()
+        if not email or not password:
+            return jsonify({"success": False, "message": "Email and password are required."})
 
-    if user:
-        user_id = user[0]
-    else:
-        cur.execute(
-            "INSERT INTO users (username, email, password) VALUES (%s, %s, %s)",
-            (email.split('@')[0], email, password)
-        )
-        mysql.connection.commit()
-        user_id = cur.lastrowid
+        cur = mysql.connection.cursor()
 
-    cur.close()
+        # ✅ fetch full user
+        cur.execute("SELECT id, name, password FROM users WHERE email=%s", (email,))
+        user = cur.fetchone()
 
-    # ✅ store in session
-    session['user_id'] = user_id
-    session['user'] = email
-    session['name'] = email.split('@')[0].title()
+        cur.close()
 
-    return jsonify({"success": True, "name": session['name']})
+        # ❌ user not found
+        if not user:
+            return jsonify({"success": False, "message": "User not found"})
+
+        # ❌ password mismatch
+        if password != user[2]:
+            return jsonify({"success": False, "message": "Incorrect password"})
+
+        # ✅ success
+        session['user_id'] = user[0]
+        session['name'] = user[1]
+
+        return jsonify({"success": True, "name": user[1]})
+
+    except Exception as e:
+        print("LOGIN ERROR:", str(e))
+        return jsonify({"success": False, "message": str(e)})
 
 @app.route('/api/register', methods=['POST'])
 def register():
-    data = request.get_json()
-    email = data.get('email','').strip()
-    password = data.get('password','').strip()
-    name = data.get('name','').strip()
-    if not all([email, password, name]):
-        return jsonify({"success": False, "message": "All fields are required."})
-    if '@' not in email:
-        return jsonify({"success": False, "message": "Invalid email format."})
-    if len(password) < 6:
-        return jsonify({"success": False, "message": "Password must be at least 6 characters."})
-    session['user'] = email
-    session['name'] = name
-    return jsonify({"success": True, "name": name})
+    try:
+        data = request.get_json()
+        email = data.get('email', '').strip()
+        password = data.get('password', '').strip()
+        name = data.get('name', '').strip()
+
+        if not all([email, password, name]):
+            return jsonify({"success": False, "message": "All fields are required."})
+
+        if '@' not in email:
+            return jsonify({"success": False, "message": "Invalid email format."})
+
+        if len(password) < 6:
+            return jsonify({"success": False, "message": "Password must be at least 6 characters."})
+
+        cur = mysql.connection.cursor()
+
+        # ✅ check if user already exists
+        cur.execute("SELECT id FROM users WHERE email=%s", (email,))
+        existing = cur.fetchone()
+
+        if existing:
+            cur.close()
+            return jsonify({"success": False, "message": "User already exists"})
+
+        # ✅ insert user into DB
+        cur.execute(
+            "INSERT INTO users (name, email, password) VALUES (%s, %s, %s)",
+            (name, email, password)
+        )
+        mysql.connection.commit()
+
+        user_id = cur.lastrowid
+        cur.close()
+
+        # ✅ store session
+        session['user_id'] = user_id
+        session['name'] = name
+
+        return jsonify({"success": True, "name": name})
+
+    except Exception as e:
+        print("REGISTER ERROR:", str(e))
+        return jsonify({"success": False, "message": str(e)})
 
 @app.route('/api/logout', methods=['POST'])
 def logout():
