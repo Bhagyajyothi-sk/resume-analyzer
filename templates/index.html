@@ -752,7 +752,7 @@ async function doLogin(){
   if(!email||!pass){ toast('Please fill all fields','error'); return; }
   showLoading('Signing in…');
   try{
-    const r = await fetch('/api/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,password:pass})});
+    const r = await fetch('/api/login',{method:'POST',credentials: "include",headers:{'Content-Type':'application/json'},body:JSON.stringify({email,password:pass})});
     const d = await r.json();
     if(d.success){
       currentUser = d.name;
@@ -772,7 +772,7 @@ async function doRegister(){
   if(!name||!email||!pass){ toast('Please fill all fields','error'); return; }
   showLoading('Creating account…');
   try{
-    const r = await fetch('/api/register',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name,email,password:pass})});
+    const r = await fetch('/api/register',{method:'POST',credentials: "include",headers:{'Content-Type':'application/json'},body:JSON.stringify({name,email,password:pass})});
     const d = await r.json();
     if(d.success){
       currentUser = d.name;
@@ -836,7 +836,7 @@ async function processFile(file){
   formData.append('resume', file);
   showLoading('Uploading resume…');
   try{
-    const r = await fetch('/api/upload',{method:'POST',body:formData});
+    const r = await fetch('/api/upload',{method:'POST',credentials: "include",body:formData});
     const d = await r.json();
     if(d.success){
       uploadedFile = file.name;
@@ -889,7 +889,7 @@ async function runFullAnalysis(){
   document.getElementById('btn1').classList.add('active-btn');
   document.getElementById('btn2').classList.remove('active-btn');
   try{
-    const r = await fetch('/api/analyze',{method:'POST'});
+    const r = await fetch('/api/analyze',{method:'POST',credentials: "include"});
     const d = await r.json();
     if(!d.success){ toast(d.message,'error'); hideLoading(); return; }
     analysisData = d;
@@ -1056,7 +1056,7 @@ async function runSkillGap(){
   document.getElementById('jobDropdown').style.display='none';
   showLoading('Computing skill gap using TF-IDF + Cosine Similarity…');
   try{
-    const r = await fetch('/api/skill-gap',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({job})});
+    const r = await fetch('/api/skill-gap',{method:'POST',credentials: "include",headers:{'Content-Type':'application/json'},body:JSON.stringify({job})});
     const d = await r.json();
     if(!d.success){
       toast(d.message,'error');

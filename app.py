@@ -61,7 +61,9 @@ app.config['SESSION_TYPE'] = 'filesystem'
 app.config['SESSION_PERMANENT'] = False
 app.config['SESSION_FILE_DIR'] = './flask_session'
 Session(app)
-CORS(app)
+CORS(app, supports_credentials=True)
+app.config['SESSION_COOKIE_SAMESITE'] = "None"
+app.config['SESSION_COOKIE_SECURE'] = True
 
 app.config['MYSQL_HOST'] = 'hopper.proxy.rlwy.net'
 app.config['MYSQL_USER'] = 'root'
