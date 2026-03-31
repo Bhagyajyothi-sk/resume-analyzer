@@ -63,10 +63,11 @@ app.config['SESSION_FILE_DIR'] = './flask_session'
 Session(app)
 CORS(app)
 
-app.config['MYSQL_HOST'] = 'localhost'
+app.config['MYSQL_HOST'] = 'hopper.proxy.rlwy.net'
 app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = 'pass@bhagya'
-app.config['MYSQL_DB'] = 'resumeiq'
+app.config['MYSQL_PASSWORD'] = 'HadHlabRNbLxrJPqgqgkqukbmKuAQzVy'
+app.config['MYSQL_DB'] = 'railway'
+app.config['MYSQL_PORT'] = 55341
 app.config['MYSQL_CHARSET'] = 'utf8mb4'
 app.config['MYSQL_COLLATION'] = 'utf8mb4_unicode_ci'
 mysql = MySQL(app)
