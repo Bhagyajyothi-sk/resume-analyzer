@@ -1230,26 +1230,32 @@ def analyze():
     }
     session['last_analysis'] = json.dumps(result)
     
-    # ✅ SAVE ANALYSIS TO DATABASE
+    try:
+        cur = mysql.connection.cursor()
 
-    cur = mysql.connection.cursor()
+        # get latest resume id safely
+        cur.execute("SELECT id FROM resumes ORDER BY id DESC LIMIT 1")
+        row = cur.fetchone()
+        resume_id = row[0] if row else None
 
-    # get latest resume id
-    cur.execute("SELECT id FROM resumes ORDER BY id DESC LIMIT 1")
-    resume_id = cur.fetchone()[0]
+        # insert only if resume exists
+        if resume_id:
+            cur.execute("""
+                INSERT INTO analysis (resume_id, skills_found, missing_skills, score)
+                VALUES (%s, %s, %s, %s)
+            """, (
+                resume_id,
+                ", ".join(skills),
+                ", ".join(top_jobs[0]['missing_skills']) if top_jobs else "",
+                ats_score
+            ))
 
-    cur.execute("""
-        INSERT INTO analysis (resume_id, skills_found, missing_skills, score)
-        VALUES (%s, %s, %s, %s)
-    """, (
-        resume_id,
-        ", ".join(skills),
-        ", ".join(top_jobs[0]['missing_skills']) if top_jobs else "",
-        ats_score
-    ))
+            mysql.connection.commit()
 
-    mysql.connection.commit()
-    cur.close()
+        cur.close()
+
+    except Exception as e:
+        print("ANALYSIS ERROR:", str(e))
     return jsonify(result)
 
 # ── Skill Gap Analysis ────────────────────────────────────────────────────────
