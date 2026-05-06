@@ -65,11 +65,11 @@ CORS(app, supports_credentials=True)
 app.config['SESSION_COOKIE_SAMESITE'] = "None"
 app.config['SESSION_COOKIE_SECURE'] = True
 
-app.config['MYSQL_HOST'] = 'mysql.railway.internal'
+app.config['MYSQL_HOST'] = 'trolley.proxy.rlwy.net'
 app.config['MYSQL_USER'] = 'root'
 app.config['MYSQL_PASSWORD'] = 'ZcQCTaNlOrvTLKXwcYnWRrWKqPBiMHcf'
 app.config['MYSQL_DB'] = 'railway'
-app.config['MYSQL_PORT'] = 3306
+app.config['MYSQL_PORT'] = 41246
 app.config['MYSQL_CHARSET'] = 'utf8mb4'
 app.config['MYSQL_COLLATION'] = 'utf8mb4_unicode_ci'
 mysql = MySQL(app)
