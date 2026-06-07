@@ -1,7 +1,34 @@
 # ResumeIQ — AI-Powered Resume Analyzer
 
 A full-stack AI & Data Science project built with **Python Flask** backend and a modern HTML/CSS/JS frontend.
+## 📸 Application Screenshots
 
+### Login Page
+![Login Page](screenshots/Screenshot%202026-06-06%20192604.png)
+
+### Resume Upload
+![Resume Upload](screenshots/Screenshot%202026-06-06%20195203.png)
+
+### Analysis Mode Selection
+![Analysis Mode](screenshots/Screenshot%202026-06-06%20195419.png)
+
+### ATS Score Dashboard
+![ATS Dashboard](screenshots/Screenshot%202026-06-06%20195439.png)
+
+### Skills & Demand Analytics
+![Skills Analytics](screenshots/Screenshot%202026-06-06%20195458.png)
+
+### Skills Detected
+![Skills Detected](screenshots/Screenshot%202026-06-06%20195518.png)
+
+### AI-Matched Job Recommendations
+![Job Recommendations](screenshots/Screenshot%202026-06-06%20195538.png)
+
+### Skill Gap Analysis & Learning Roadmap
+![Skill Gap](screenshots/Screenshot%202026-06-06%20195653.png)
+
+### Skills You Have vs Skills To Acquire
+![Skills Gap](screenshots/Screenshot%202026-06-06%20195718.png)
 ---
 
 ## 🚀 Features
