@@ -1,6 +1,18 @@
 # ResumeIQ — AI-Powered Resume Analyzer
 
-A full-stack AI & Data Science project built with **Python Flask** backend and a modern HTML/CSS/JS frontend.
+An AI-powered career intelligence platform that analyzes resumes, calculates ATS scores, performs skill-gap analysis, recommends matching job roles using TF-IDF & Cosine Similarity, and generates personalized learning roadmaps.
+
+## ✨ Key Highlights
+
+- ATS Resume Scoring System
+- Resume Parsing (PDF & DOCX)
+- TF-IDF + Cosine Similarity Job Matching
+- Skill Gap Analysis
+- Personalized Learning Roadmaps
+- AI-Matched Job Recommendations
+- PDF Report Generation
+- 500+ Skills Across 16 Job Roles
+  
 ## 📸 Application Screenshots
 
 ### Login Page
